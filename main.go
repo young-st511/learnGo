@@ -2,11 +2,13 @@ package main
 
 import "fmt"
 
-// PascalCase로 쓰여진 변수나 함수는 export 된다!
 func main() {
-	// ❌ error!
-	fmt.println("Hellow World!")
+	// 상수 선언 법
+	const NAME string = "youngHun"
+	// 변수 선언 법
+	var name string = "young"
+	// 위와 같음 - 타입 추론을 해준다!!
+	name2 := "young" // string
 
-	// ✅ OK!
-	fmt.Println("Hellow World!")
+	fmt.Println("Hello World!" + name + name2)
 }
