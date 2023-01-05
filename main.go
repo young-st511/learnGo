@@ -1,22 +1,20 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	a := 2
-	b := a
-	a = 10 // a = 10, b = 2
-	fmt.Println(a, b)
+	//# Array
+	// Go의 배열 선언법 - Array has length!
+	names := [5]string{"jung", "young", "hun"}
+	names[3] = "haha"
+	names[4] = "lala"
+	// names[5] = "kaka" // error!
+	fmt.Println(names)
 
-	aa := 2
-	bb := &aa
-	//# & -> 메모리 주소를 볼 수 있다
-	//# * -> 해당 주소에 들어가 값을 볼 수 있다
-	aa = 6
-	fmt.Println(aa, *bb) // aa = 6, *bb = 6
-	*bb = 0
-	fmt.Println(aa, *bb) // aa = 0, *bb = 0
-
+	//# Slice
+	// 선언은 배열과 비슷하다
+	names2 := []string{"jung", "young", "hun"}
+	// 새로운 Slice를 return!
+	names2 = append(names2, "lala")
+	fmt.Println(names2)
 }
