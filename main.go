@@ -2,13 +2,23 @@ package main
 
 import "fmt"
 
-func main() {
-	//# Map - key, value의 쌍으로 이루어진 자료형
-	young := map[string]string{"name": "young", "age": "24"}
-	fmt.Println(young)
+//# Go에는 Class, 즉, constructor가 없다!!
+//# Structure의 type 지정!
+type person struct {
+	name     string
+	age      int
+	favFoods []string
+}
 
-	// Iterate Map -> 이렇게 순환도 가능하다!
-	for key, value := range young {
-		fmt.Println(key, value)
-	}
+func main() {
+	//# Structure(구조체) - JS의 Object와 비슷함!
+	favFoods := []string{"banana", "pasta", "egg"}
+
+	// 이렇게 선언 가능하지만 명확하지 않음
+	young := person{"young", 21, favFoods}
+
+	// Object처럼 key 명시 가능!!
+	young = person{name: "young", age: 21, favFoods: favFoods}
+	fmt.Println(young.age)
+	fmt.Println(young)
 }
