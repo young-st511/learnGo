@@ -420,3 +420,26 @@ func main() {
 
 - Map은 해당 key에 value가 존재하는지의 여부를 반환해준다!!!
   - `value, exists := d[word]`
+
+```go
+////////////////////////
+// ./banking/banking.go
+////////////////////////
+
+// Add a word to the dictionary
+func (d Dictionary) Add(word string, def string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case errNotFound:
+		d[word] = def
+	case nil:
+		fmt.Println("exist")
+		return errWordExist
+	}
+
+	return nil
+}
+```
+
+- error에 따른 switch 문으로 처리할 수도 있다!

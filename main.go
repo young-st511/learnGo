@@ -9,14 +9,13 @@ import (
 func main() {
 	dictionary := myDict.Dictionary{"first": "First word"}
 
-	//# Go의 에러 핸들링!!!
-	definition, err := dictionary.Search("second")
+	err2 := dictionary.Add("hello", "Greeting")
 
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println(definition)
+	if err2 != nil {
+		fmt.Println(err2)
 	}
+	hello, _ := dictionary.Search("hello")
 
-	fmt.Println(dictionary.Search("first"))
+	fmt.Println(hello)
+
 }

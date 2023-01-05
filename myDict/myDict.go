@@ -1,15 +1,20 @@
 package myDict
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Type alias
 type Money int
+
 // var money Money = 2
 
 // just 'alias(가명)', structure 아님!! - key, value가 string
 type Dictionary map[string]string
 
 var errNotFound = errors.New("can not found the word")
+var errWordExist = errors.New("that word already exists")
 
 //# 모든 type은 receiver를 이용하여 methods를 가질 수 있다!!
 
@@ -23,4 +28,19 @@ func (d Dictionary) Search(word string) (string, error) {
 	}
 
 	return "", errNotFound
+}
+
+// Add a word to the dictionary
+func (d Dictionary) Add(word string, def string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case errNotFound:
+		d[word] = def
+	case nil:
+		fmt.Println("exist")
+		return errWordExist
+	}
+
+	return nil
 }
