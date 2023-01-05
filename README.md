@@ -358,6 +358,8 @@ func main() {
 
 - String method가 존재하는 경우 String meghod를 자동으로 호출시켜준다!
 
+---
+
 # Dictionary Project
 
 ```go
@@ -508,3 +510,38 @@ func main() {
 
 }
 ```
+
+---
+
+# URL Checker Project
+
+## map
+
+- make 함수를 사용하지 않거나 map을 선언할 때 초기화 하지 않으면 map은 빈 map이 아닌 nil이 되어버린다!
+
+```go
+// var results = map[string]string -> panic error!! ❌
+var results = map[string]string{}
+// var results = make(map[string]string) -> ✅
+```
+
+## GoRoutine
+
+- go 루틴을 동시에 실행하려고 할 때, 작업이 끝날 때까지 메인 함수는 기다려주지 않는다!
+
+```go
+func count(name string) {
+	for i := 0; i < 10; i++ {
+		fmt.Println(name, "hello!", i)
+		time.Sleep(time.Second)
+	}
+}
+
+func main() {
+	go count("young")
+	go count("hun")
+	time.Sleep(time.Second * 5) // i = 0 ~ 4
+}
+```
+
+- 위 프로그램은 for루프를 5번까지만 돌고 끝나버림!
