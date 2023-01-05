@@ -3,18 +3,12 @@ package main
 import "fmt"
 
 func main() {
-	//# Array
-	// Go의 배열 선언법 - Array has length!
-	names := [5]string{"jung", "young", "hun"}
-	names[3] = "haha"
-	names[4] = "lala"
-	// names[5] = "kaka" // error!
-	fmt.Println(names)
+	//# Map - key, value의 쌍으로 이루어진 자료형
+	young := map[string]string{"name": "young", "age": "24"}
+	fmt.Println(young)
 
-	//# Slice
-	// 선언은 배열과 비슷하다
-	names2 := []string{"jung", "young", "hun"}
-	// 새로운 Slice를 return!
-	names2 = append(names2, "lala")
-	fmt.Println(names2)
+	// Iterate Map -> 이렇게 순환도 가능하다!
+	for key, value := range young {
+		fmt.Println(key, value)
+	}
 }
