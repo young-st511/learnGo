@@ -1,4 +1,5 @@
 # learnGo
+
 Golang을 연습합니다
 
 # Golang
@@ -86,6 +87,7 @@ func main() {
 ```
 
 ## 반복문
+
 ```go
 func superAdd(numbers ...int) int {
 	// for-in, for-of랑 비슷하다!
@@ -123,6 +125,38 @@ func canIDrink(age int) bool {
 
 	// if문 선언과 동시에 변수 생성이 가능하다! - variable expression
 	if koreanAge := age + 2; koreanAge < 20 {
+		return false
+	}
+	return true
+}
+
+func main() {
+	fmt.Println(canIDrink(18))
+}
+```
+
+### switch문
+
+```go
+func canIDrink(age int) bool {
+	// switch문도 variable expression 사용 가능!
+	switch koreanAge := age + 2; koreanAge {
+	case 18:
+		return true
+	case 10:
+		return false
+	case 50:
+		return true
+	}
+	return false
+}
+
+func canIDrink2(age int) bool {
+	// switch문에 조건문도 사용 가능
+	switch koreanAge := age + 2; {
+	case koreanAge < 18:
+		return false
+	case koreanAge > 70:
 		return false
 	}
 	return true
