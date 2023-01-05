@@ -4,28 +4,17 @@ import (
 	"fmt"
 )
 
-func superAdd(numbers ...int) int {
-	// for-in, for-of랑 비슷하다!
-	// range는 index와 변환되는 값을 반환한다
-	for index, number := range numbers {
-		fmt.Println(index, number)
+func canIDrink(age int) bool {
+	// 일반적인 if statement
+	// if age < 18 {
+
+	// if문 선언과 동시에 변수 생성이 가능하다! - variable expression
+	if koreanAge := age + 2; koreanAge < 20 {
+		return false
 	}
-
-	total := 0
-
-	// 언더바 사용하면 컴파일러가 무시한다
-	for _, number := range numbers {
-		total += number
-	}
-
-	// 물론 전통적인 for문도 가능!!
-	for i := 0; i < len(numbers); i++ {
-		fmt.Println(numbers[i])
-	}
-
-	return total
+	return true
 }
 
 func main() {
-	superAdd(11, 22, 33, 44, 55, 66, 77, 88)
+	fmt.Println(canIDrink(18))
 }
