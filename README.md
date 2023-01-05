@@ -443,3 +443,68 @@ func (d Dictionary) Add(word string, def string) error {
 ```
 
 - error에 따른 switch 문으로 처리할 수도 있다!
+
+### Update, Delete methods
+
+```go
+////////////////////////
+// ./banking/banking.go
+////////////////////////
+
+func (d Dictionary) Update(word, definition string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case nil:
+		d[word] = definition
+	case errNotFound:
+		return errCantUpdate
+	}
+
+	return nil
+}
+
+func (d Dictionary) Delete(word string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case nil:
+		// map docs 참고
+		delete(d, word)
+	case errNotFound:
+		return errCantDelete
+	}
+
+	return nil
+}
+```
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/young-st511/learnGo/myDict"
+)
+
+func main() {
+	dictionary := myDict.Dictionary{}
+	baseWord := "hello"
+
+	dictionary.Add(baseWord, "Greeting")
+	word, _ := dictionary.Search(baseWord)
+
+	fmt.Println(word)
+
+	dictionary.Delete("hello")
+	word2, err := dictionary.Search(baseWord)
+
+	if err == nil {
+		fmt.Println(word2)
+	} else {
+		fmt.Println(err)
+	}
+
+}
+```

@@ -15,6 +15,8 @@ type Dictionary map[string]string
 
 var errNotFound = errors.New("can not found the word")
 var errWordExist = errors.New("that word already exists")
+var errCantUpdate = errors.New("can't update non-existing word")
+var errCantDelete = errors.New("can't delete non-existing word")
 
 //# 모든 type은 receiver를 이용하여 methods를 가질 수 있다!!
 
@@ -40,6 +42,33 @@ func (d Dictionary) Add(word string, def string) error {
 	case nil:
 		fmt.Println("exist")
 		return errWordExist
+	}
+
+	return nil
+}
+
+func (d Dictionary) Update(word, definition string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case nil:
+		d[word] = definition
+	case errNotFound:
+		return errCantUpdate
+	}
+
+	return nil
+}
+
+func (d Dictionary) Delete(word string) error {
+	_, err := d.Search(word)
+
+	switch err {
+	case nil:
+		// map docs 참고
+		delete(d, word)
+	case errNotFound:
+		return errCantDelete
 	}
 
 	return nil
