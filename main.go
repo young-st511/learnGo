@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/young-st511/learnGo/banking"
 )
@@ -15,10 +14,11 @@ func main() {
 	fmt.Println(account.Balance())
 
 	//# Go의 Error Handling(no try-catch, no exception)
-	err := account.Withdraw(2000)
+	err := account.Withdraw(430)
 	if err != nil {
-		// 출력과 함께 프로그램 종료
-		log.Fatalln(err)
+		fmt.Println(err)
 	}
-	fmt.Println(account.Balance())
+
+	//# String method가 존재하는 경우 String meghod를 자동으로 호출시켜준다!
+	fmt.Println(account)
 }

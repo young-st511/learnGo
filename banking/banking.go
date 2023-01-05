@@ -1,6 +1,9 @@
 package banking
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 //# Public을 위해 PascalCase를 사용한다!!!!
 //# Account struct
@@ -45,4 +48,17 @@ func (a *Account) Withdraw(amount int) error {
 
 	a.balance -= amount
 	return nil // error의 null
+}
+
+// ChangeOwner of the account
+func (a *Account) ChangeOwner(newOwner string) {
+	a.owner = newOwner
+}
+
+func (a Account) Owner() string {
+	return a.owner
+}
+
+func (a Account) String() string {
+	return fmt.Sprint(a.Owner(), "'s account. \nHas: ", a.Balance())
 }

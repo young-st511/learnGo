@@ -258,7 +258,9 @@ func main() {
 ## Structure Methods
 
 ```go
+/////////////////////////
 // ./banking/banking.go
+/////////////////////////
 
 package banking
 
@@ -317,4 +319,41 @@ func (a *Account) Withdraw(amount int) error {
   - **this 대신 pointer 사용!**
   - 포인터 사용하지 않으면 자동으로 복사본 생성
     - 오히려 안전해서 좋아!
--
+- `log.Fatalln(err)` - error 출력 후 프로그램 종료
+
+```go
+////////////////////////
+// ./banking/banking.go
+////////////////////////
+
+// ...전략
+
+func (a Account) String() string {
+	return fmt.Sprint(a.Owner(), "'s account. \nHas: ", a.Balance())
+}
+```
+
+```go
+////////////////////////
+// ./main.go
+////////////////////////
+
+func main() {
+	// account := banking.Account{Owner: "young", Balance: 1000}
+	account := banking.NewAccount("young")
+	fmt.Println(account)
+	account.Deposit(1000)
+	fmt.Println(account.Balance())
+
+	//# Go의 Error Handling(no try-catch, no exception)
+	err := account.Withdraw(430)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//# String method가 존재하는 경우 String meghod를 자동으로 호출시켜준다!
+	fmt.Println(account)
+}
+```
+
+- String method가 존재하는 경우 String meghod를 자동으로 호출시켜준다!
