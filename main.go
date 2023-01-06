@@ -12,7 +12,7 @@ type result struct {
 
 func main() {
 	ch := make(chan result)
-	// var results = map[string]string{}
+	var results = map[string]string{}
 
 	urls := []string{
 		"https://www.airbnb.com/",
@@ -30,7 +30,12 @@ func main() {
 	}
 
 	for range urls {
-		fmt.Println(<-ch)
+		res := <-ch
+		results[res.url] = res.status
+	}
+
+	for url, status := range results {
+		fmt.Println(url, status)
 	}
 }
 
