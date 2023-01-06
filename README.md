@@ -545,3 +545,46 @@ func main() {
 ```
 
 - 위 프로그램은 for루프를 5번까지만 돌고 끝나버림!
+
+### Channels
+
+- GoRoutine에서 데이터를 return 받기 위해서는 단순 return 사용이 불가능하다.
+    - Channel을 열어줘야한다!!
+- Channel에 값을 넣어주기 위해서는 다음과 같이 해야한다.
+    - 화살표는 무조건 왼쪽 방향! `<-`
+    - 송신: `ch <- true`
+        - `c <- person + " Hi!"` 다른 자료형도 가능
+    - 수신: `result := <- ch`
+        - `fmt.Println(<-c)` 이렇게도 가능
+- 런타임 시에 채널로부터 수신하는 코드가 있다면 데이터가 들어올 때까지 기다려준다!
+    - `await` 랑 비슷한 듯!
+
+```go
+func count(person string, c chan string) {
+	time.Sleep(time.Second * 5)
+	c <- person + " Hi!"
+}
+
+func main() {
+	c := make(chan string)
+	people := [2]string{"young", "hun"}
+
+	for _, person := range people {
+		go count(person, c)
+	}
+
+	fmt.Println("Waiting for messages")
+	fmt.Println(<-c)
+	fmt.Println(<-c)
+	fmt.Println("END")
+
+	//# 이렇게 루프도 가능!!!!
+	for i := 0; i < len(people); i++ {
+		fmt.Println(<-c)
+	}
+}
+```
+
+- 인수에서 chan 타입 지정 시에 send only, receive only를 화살표로 지정할 수 있다.
+- send only: `chan<- ch`
+- receive only: `<-chan ch`
