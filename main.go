@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -21,14 +23,34 @@ var baseURL string = "https://www.saramin.co.kr/zf_user/search/recruit?=&searchw
 
 func main() {
 	var jobs []extractedJob
-	totalPages := getPagesNumber(baseURL)
+	// totalPages := getPagesNumber(baseURL)
 
-	for i := 0; i < totalPages; i++ {
+	for i := 0; i < 2; i++ {
 		page := getPage(i)
 		jobs = append(jobs, page...)
 	}
 
-	fmt.Println(jobs)
+	writeJobs(jobs)
+	fmt.Println("Done, extracted", len(jobs))
+}
+
+func writeJobs(jobs []extractedJob) {
+	file, err := os.Create("jobs.csv")
+	checkErr(err)
+
+	w := csv.NewWriter(file)
+	defer w.Flush()
+
+	headers := []string{"ID", "Title", "Company", "Category"}
+
+	wErr := w.Write(headers)
+	checkErr(wErr)
+
+	for _, job := range jobs {
+		jobSlice := []string{job.id, job.title, job.company, job.category}
+		jwErr := w.Write(jobSlice)
+		checkErr(jwErr)
+	}
 }
 
 func getPage(page int) []extractedJob {
