@@ -23,39 +23,24 @@ var baseURL string = "https://www.saramin.co.kr/zf_user/search/recruit?=&searchw
 
 func main() {
 	var jobs []extractedJob
-	// totalPages := getPagesNumber(baseURL)
+	c := make(chan []extractedJob)
+	totalPages := getPagesNumber(baseURL)
+	// totalPages := 2
 
-	for i := 0; i < 2; i++ {
-		page := getPage(i)
-		jobs = append(jobs, page...)
+	for i := 0; i < totalPages; i++ {
+		go getPage(i, c)
+	}
+
+	for i := 0; i < totalPages; i++ {
+		extractedJobs := <-c
+		jobs = append(jobs, extractedJobs...)
 	}
 
 	writeJobs(jobs)
 	fmt.Println("Done, extracted", len(jobs))
 }
 
-func writeJobs(jobs []extractedJob) {
-	file, err := os.Create("jobs.csv")
-	checkErr(err)
-
-	w := csv.NewWriter(file)
-	defer w.Flush()
-
-	headers := []string{"Link", "Title", "Company", "Category"}
-
-	wErr := w.Write(headers)
-	checkErr(wErr)
-
-	jobBaseUrl := "https://www.saramin.co.kr/zf_user/jobs/relay/view?isMypage=no&rec_idx="
-
-	for _, job := range jobs {
-		jobSlice := []string{jobBaseUrl + job.id, job.title, job.company, job.category}
-		jwErr := w.Write(jobSlice)
-		checkErr(jwErr)
-	}
-}
-
-func getPage(page int) []extractedJob {
+func getPage(page int, pageC chan<- []extractedJob) {
 	var jobs []extractedJob
 	c := make(chan extractedJob)
 
@@ -82,7 +67,7 @@ func getPage(page int) []extractedJob {
 		jobs = append(jobs, job)
 	}
 
-	return jobs
+	pageC <- jobs
 }
 
 func extractJob(card *goquery.Selection, c chan<- extractedJob) {
@@ -102,6 +87,27 @@ func extractJob(card *goquery.Selection, c chan<- extractedJob) {
 
 	c <- extractedJob{
 		id: id, title: title, company: company, category: category,
+	}
+}
+
+func writeJobs(jobs []extractedJob) {
+	file, err := os.Create("jobs.csv")
+	checkErr(err)
+
+	w := csv.NewWriter(file)
+	defer w.Flush()
+
+	headers := []string{"Link", "Title", "Company", "Category"}
+
+	wErr := w.Write(headers)
+	checkErr(wErr)
+
+	jobBaseUrl := "https://www.saramin.co.kr/zf_user/jobs/relay/view?isMypage=no&rec_idx="
+
+	for _, job := range jobs {
+		jobSlice := []string{jobBaseUrl + job.id, job.title, job.company, job.category}
+		jwErr := w.Write(jobSlice)
+		checkErr(jwErr)
 	}
 }
 
