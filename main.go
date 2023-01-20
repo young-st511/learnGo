@@ -41,13 +41,15 @@ func writeJobs(jobs []extractedJob) {
 	w := csv.NewWriter(file)
 	defer w.Flush()
 
-	headers := []string{"ID", "Title", "Company", "Category"}
+	headers := []string{"Link", "Title", "Company", "Category"}
 
 	wErr := w.Write(headers)
 	checkErr(wErr)
 
+	jobBaseUrl := "https://www.saramin.co.kr/zf_user/jobs/relay/view?isMypage=no&rec_idx="
+
 	for _, job := range jobs {
-		jobSlice := []string{job.id, job.title, job.company, job.category}
+		jobSlice := []string{jobBaseUrl + job.id, job.title, job.company, job.category}
 		jwErr := w.Write(jobSlice)
 		checkErr(jwErr)
 	}
@@ -55,6 +57,7 @@ func writeJobs(jobs []extractedJob) {
 
 func getPage(page int) []extractedJob {
 	var jobs []extractedJob
+	c := make(chan extractedJob)
 
 	pageURL := baseURL + strconv.Itoa(page) + "&recruitSort=relation&recruitPageCount=100"
 	fmt.Println(pageURL)
@@ -68,15 +71,21 @@ func getPage(page int) []extractedJob {
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	checkErr(err)
 
-	doc.Find(".item_recruit").Each(func(i int, card *goquery.Selection) {
-		job := extractJob(card)
-		jobs = append(jobs, job)
+	searchCards := doc.Find(".item_recruit")
+
+	searchCards.Each(func(i int, card *goquery.Selection) {
+		go extractJob(card, c)
 	})
+
+	for i := 0; i < searchCards.Length(); i++ {
+		job := <-c
+		jobs = append(jobs, job)
+	}
 
 	return jobs
 }
 
-func extractJob(card *goquery.Selection) extractedJob {
+func extractJob(card *goquery.Selection, c chan<- extractedJob) {
 	id, _ := card.Attr("value")
 	title := cleanString(card.Find(".job_tit>a").Text())
 	company := cleanString(card.Find(".corp_name>a").Text())
@@ -91,7 +100,7 @@ func extractJob(card *goquery.Selection) extractedJob {
 
 	category = cleanString(category)
 
-	return extractedJob{
+	c <- extractedJob{
 		id: id, title: title, company: company, category: category,
 	}
 }
