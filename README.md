@@ -640,3 +640,21 @@ func hitURL(url string, ch chan<- result) {
 ```
 
 ---
+
+# Go Web Scrapper
+
+## GoQuery
+
+jQuery와 문법이 거의 비슷하며, Golang에서 DOM 요소를 조작할 수 있게 해준다!
+
+## GoRoutine
+
+```bash
+# before
+[Done] exited with code=0 in 10.419 seconds
+
+# after
+[Done] exited with code=0 in 2.874 seconds
+```
+
+GoRoutine과 channel을 이용하면 놀라운 퍼포먼스를 만들 수 있다...!

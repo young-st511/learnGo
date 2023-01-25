@@ -1,4 +1,4 @@
-package main
+package scrapper
 
 import (
 	"encoding/csv"
@@ -19,16 +19,14 @@ type extractedJob struct {
 	category string
 }
 
-var baseURL string = "https://www.saramin.co.kr/zf_user/search/recruit?=&searchword=프론트엔드&recruitPage="
-
-func main() {
+func Scrape(term string) {
+	var baseURL string = "https://www.saramin.co.kr/zf_user/search/recruit?=&searchword=" + term + "&recruitPage="
 	var jobs []extractedJob
 	c := make(chan []extractedJob)
 	totalPages := getPagesNumber(baseURL)
-	// totalPages := 2
 
 	for i := 0; i < totalPages; i++ {
-		go getPage(i, c)
+		go getPage(i, c, baseURL)
 	}
 
 	for i := 0; i < totalPages; i++ {
@@ -40,7 +38,7 @@ func main() {
 	fmt.Println("Done, extracted", len(jobs))
 }
 
-func getPage(page int, pageC chan<- []extractedJob) {
+func getPage(page int, pageC chan<- []extractedJob, baseURL string) {
 	var jobs []extractedJob
 	c := make(chan extractedJob)
 
