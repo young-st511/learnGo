@@ -658,3 +658,15 @@ jQuery와 문법이 거의 비슷하며, Golang에서 DOM 요소를 조작할 �
 ```
 
 GoRoutine과 channel을 이용하면 놀라운 퍼포먼스를 만들 수 있다...!
+
+# Go Jobs Project
+
+## Go Echo
+
+- Go를 이용하여 간편하게 백엔드를 구성할 수 있다.
+- 공식 문서가 잘 되어 있다.
+
+## Go Buffalo
+
+- 라우팅, 라이브 서버, 템플릿 등 백엔드 구성을 위한 많은 기능들을 제공
+- Go의 Django 같은 것이라고 한다.
